@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Category</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+  <!-- ================= CATEGORY TOPBAR ================= -->
+  <div class="category-topbar">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <span class="breadcrumb">
+      Home / <strong id="categoryName"></strong>
+    </span>
+  </div>
+
+  <!-- ================= CATEGORY TITLE ================= -->
+  <h2 id="categoryTitle" style="padding: 20px"></h2>
+
+  <!-- ================= PRODUCTS GRID ================= -->
+  <div class="products-grid" id="products"></div>
+
+  <!-- ================= JAVASCRIPT FILES ================= -->
+  <script src="assets/js/products-data.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/category.js"></script>
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trendeals Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="assets/js/products.js"></script>
+
+  <style>
+    /* ================= CSS VARIABLES ================= */
+    :root { 
+      --purple: #8e44ad; 
+      --bg: #faf6fb; 
+    }
+
+    /* ================= GLOBAL RESET ================= */
+    * { 
+      box-sizing: border-box; 
+      font-family: Arial, sans-serif; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    body { 
+      background: var(--bg); 
+    }
+
+    /* ================= MODAL BACKDROP ================= */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    /* ================= MODAL BOX ================= */
+    .modal-box {
+      background: #fff;
+      width: 480px;
+      max-width: 94%;
+      max-height: 85vh;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0,0,0,.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalPop .25s ease;
+    }
+
+    /* ================= MODAL HEADER ================= */
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: #f2f2f2;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      background: #e0e0e0;
+    }
+
+    /* ================= MODAL BODY ================= */
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* ================= FORM INPUTS ================= */
+    .modal-body input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    .modal-body input:focus {
+      outline: none;
+      border-color: #8e44ad;
+    }
+
+    /* ================= FORM LABELS ================= */
+    .modal-body label {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 12px 0 6px;
+      display: block;
+    }
+
+    /* ================= IMAGE PREVIEW ================= */
+    .preview {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .preview img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .preview-item {
+      position: relative;
+    }
+
+    .preview-item .remove {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: red;
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .preview-item .remove:hover {
+      background: #e60000;
+    }
+
+    /* ================= SAVE BUTTON ================= */
+    .save-btn {
+      margin-top: 15px;
+      background: linear-gradient(135deg, #8e44ad, #9b59b6);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .save-btn:hover {
+      opacity: .95;
+    }
+
+    /* ================= BUTTON STYLES ================= */
+    .btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(.96);
+    }
+
+    .btn-edit {
+      background: #e8f0ff;
+      color: #2f5bff;
+    }
+
+    .btn-edit:hover {
+      background: #2f5bff;
+      color: #fff;
+    }
+
+    .btn-delete {
+      background: #ffecec;
+      color: #d63031;
+    }
+
+    .btn-delete:hover {
+      background: #d63031;
+      color: #fff;
+    }
+
+    .btn-disable {
+      background: #f5f5f5;
+      color: #555;
+    }
+
+    .btn-disable:hover {
+      background: #8e44ad;
+      color: #fff;
+    }
+
+    .btn-enable {
+      background: #e9fbe9;
+      color: #1e7e34;
+    }
+
+    .btn-enable:hover {
+      background: #1e7e34;
+      color: #fff;
+    }
+
+    .btn-logout {
+      width: 100%;
+      background: #8e44ad;
+      color: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .btn-logout:hover {
+      background: #7a3a99;
+    }
+
+    .btn-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #f1f1f1;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close:hover {
+      background: #e0e0e0;
+    }
+
+    /* ================= ACTIONS CONTAINER ================= */
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* ================= ANIMATIONS ================= */
+    @keyframes modalPop {
+      from {
+        transform: scale(.96);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* ================= FILE INPUTS ================= */
+    .file-input {
+      display: none;
+    }
+
+    .file-btn {
+      display: inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f3f3f3;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* ================= HEADER ================= */
+    .header {
+      height: 60px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .logo span {
+      color: var(--purple);
+    }
+
+    .hamburger {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    /* ================= SIDEBAR ================= */
+    .sidebar {
+      position: fixed;
+      right: -260px;
+      top: 0;
+      width: 260px;
+      height: 100%;
+      background: #fff;
+      padding: 20px;
+      transition: .3s;
+      z-index: 1001;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.4);
+      display: none;
+      z-index: 1000;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* ================= MAIN CONTAINER ================= */
+    .container {
+      padding: 30px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .add-btn {
+      background: var(--purple);
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .products {
+      margin-top: 25px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    /* ================= PRODUCT CARDS ================= */
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    }
+
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    /* ================= LOGIN OVERLAY ================= */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ================= ADMIN UI ================= -->
+  <div id="adminApp" style="display: none">
+    <!-- ================= HEADER ================= -->
+    <div class="header">
+      <div class="logo">TREN<span>DEALS</span></div>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </div>
+
+    <!-- ================= SIDEBAR ================= -->
+    <div class="sidebar" id="sidebar">
+      <button class="btn btn-logout" onclick="toggleMenu()">Close</button>
+      <button class="btn-close" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- ================= OVERLAY ================= -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <div class="container">
+      <div class="top-bar">
+        <h2>Products</h2>
+        <button class="add-btn" onclick="openModal()">+ Add Product</button>
+        <button class="add-btn" onclick="exportProducts()">Export JSON</button>
+      </div>
+      <div class="products" id="products"></div>
+    </div>
+
+    <!-- ================= PRODUCT MODAL ================= -->
+    <div class="modal" id="modal" onclick="closeModal()">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <!-- MODAL HEADER -->
+        <div class="modal-header">
+          <h3 id="modalTitle">Add Product</h3>
+          <button class="modal-close" onclick="closeModal()">✕</button>
+        </div>
+
+        <!-- MODAL BODY -->
+        <div class="modal-body">
+          <!-- FORM FIELDS -->
+          <input id="name" placeholder="Product Name">
+          <input id="price" type="number" placeholder="Price">
+          <input id="category" placeholder="Category">
+          <textarea id="description" placeholder="Product Description" style="
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+          "></textarea>
+          
+          <input id="sizes" placeholder="Sizes (S,M,L)">
+          <input id="colors" placeholder="Colors (Red,Blue)">
+
+          <!-- COVER IMAGE -->
+          <label>Cover Image</label>
+          <label class="file-btn" for="coverImage">Choose image</label>
+          <input type="file" id="coverImage" class="file-input">
+          <div class="preview" id="coverPreview"></div>
+
+          <!-- GALLERY IMAGES -->
+          <label>Gallery Images</label>
+          <input type="file" id="galleryImages" multiple>
+          <div class="preview" id="galleryPreview"></div>
+
+          <!-- SAVE BUTTON -->
+          <button class="save-btn" onclick="saveProduct()">Save Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    /* ================= LOCAL DATABASE ================= */
+    let PRODUCTS = JSON.parse(localStorage.getItem("products")) || [];
+
+    function saveToStorage() {
+      localStorage.setItem("products", JSON.stringify(PRODUCTS));
+    }
+
+    /* ================= GLOBAL ELEMENTS ================= */
+    const modal = document.getElementById("modal");
+    const adminApp = document.getElementById("adminApp");
+    const productsContainer = document.getElementById("products");
+
+    let editId = null;
+    let existingCoverImage = null;
+    let existingGalleryImages = [];
+    let newGalleryFiles = [];
+
+    /* ================= INITIALIZATION ================= */
+    document.addEventListener("DOMContentLoaded", () => {
+      adminApp.style.display = "block";
+      loadProducts();
+    });
+
+    /* ================= UI CONTROLS ================= */
+    function toggleMenu() {
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
+
+    function openModal() {
+      resetProductForm();
+      modal.classList.add("active");
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+    }
+
+    /* ================= PRODUCTS MANAGEMENT ================= */
+    function loadProducts() {
+      productsContainer.innerHTML = "";
+
+      PRODUCTS.forEach(p => {
+        productsContainer.innerHTML += `
+          <div class="card">
+            <img src="${p.cover_image || ""}">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+
+            <div class="actions">
+              <button class="btn btn-edit" onclick="editProduct('${p.id}')">Edit</button>
+              <button class="btn btn-delete" onclick="deleteProduct('${p.id}')">Delete</button>
+              <button class="btn btn-disable" onclick="toggleAvailable('${p.id}')">
+                ${p.available ? "Disable" : "Enable"}
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    /* ================= DELETE PRODUCT ================= */
+    function deleteProduct(id) {
+      if (!confirm("Delete product?")) return;
+
+      PRODUCTS = PRODUCTS.filter(p => p.id !== id);
+      saveToStorage();
+      loadProducts();
+    }
+
+    /* ================= TOGGLE AVAILABILITY ================= */
+    function toggleAvailable(id) {
+      PRODUCTS = PRODUCTS.map(p => {
+        if (p.id === id) p.available = !p.available;
+        return p;
+      });
+
+      saveToStorage();
+      loadProducts();
+    }
+
+    /* ================= SAVE PRODUCT ================= */
+    function saveProduct() {
+      const name = nameInput.value.trim();
+      const price = Number(priceInput.value);
+      const category = categoryInput.value.trim();
+
+      if (!name || !price || !category) {
+        alert("Fill all fields");
+        return;
+      }
+
+      // convert cover image to base64
+      if (coverImage.files[0]) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          existingCoverImage = reader.result;
+          finalizeSave();
+        };
+        reader.readAsDataURL(coverImage.files[0]);
+      } else {
+        finalizeSave();
+      }
+
+      function finalizeSave() {
+        // convert gallery images
+        const galleryPromises = newGalleryFiles.map(file => {
+          return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(file);
+          });
+        });
+
+        Promise.all(galleryPromises).then(newImages => {
+          const finalGallery = [...existingGalleryImages, ...newImages];
+
+          const newProduct = {
+            id: editId || Date.now().toString(),
+            name,
+            price,
+            category,
+            description: document.getElementById("description").value.trim(),
+            cover_image: existingCoverImage || "",
+            images: finalGallery,
+            sizes: sizesInput.value.split(",").map(s => s.trim()),
+            colors: colorsInput.value.split(",").map(c => c.trim()),
+            available: editId 
+              ? PRODUCTS.find(p => p.id === editId)?.available 
+              : true
+          };
+
+          if (editId) {
+            PRODUCTS = PRODUCTS.map(p => p.id === editId ? newProduct : p);
+          } else {
+            PRODUCTS.push(newProduct);
+          }
+
+          saveToStorage();
+          loadProducts();
+          closeModal();
+        });
+      }
+    }
+
+    /* ================= EDIT PRODUCT ================= */
+    function editProduct(id) {
+      const p = PRODUCTS.find(p => p.id === id);
+      if (!p) return;
+
+      editId = id;
+
+      nameInput.value = p.name;
+      priceInput.value = p.price;
+      categoryInput.value = p.category;
+      document.getElementById("description").value = p.description || "";
+      sizesInput.value = (p.sizes || []).join(",");
+      colorsInput.value = (p.colors || []).join(",");
+
+      existingCoverImage = p.cover_image;
+      existingGalleryImages = p.images || [];
+
+      renderCoverPreview();
+      renderGalleryPreview();
+
+      modal.classList.add("active");
+    }
+
+    /* ================= IMAGE PREVIEWS ================= */
+    function renderCoverPreview() {
+      coverPreview.innerHTML = existingCoverImage
+        ? `<div class="preview-item">
+            <img src="${existingCoverImage}">
+          </div>`
+        : "";
+    }
+
+    function renderGalleryPreview() {
+      galleryPreview.innerHTML = "";
+
+      existingGalleryImages.forEach(img => {
+        galleryPreview.innerHTML += `<img src="${img}" width="60">`;
+      });
+    }
+
+    /* ================= FORM RESET ================= */
+    function resetProductForm() {
+      editId = null;
+
+      nameInput.value = "";
+      priceInput.value = "";
+      categoryInput.value = "";
+      document.getElementById("description").value = "";
+      sizesInput.value = "";
+      colorsInput.value = "";
+
+      existingCoverImage = null;
+      existingGalleryImages = [];
+      newGalleryFiles = [];
+
+      coverPreview.innerHTML = "";
+      galleryPreview.innerHTML = "";
+    }
+
+    /* ================= DOM ELEMENTS ================= */
+    const nameInput = document.getElementById("name");
+    const priceInput = document.getElementById("price");
+    const categoryInput = document.getElementById("category");
+    const sizesInput = document.getElementById("sizes");
+    const colorsInput = document.getElementById("colors");
+
+    const coverImage = document.getElementById("coverImage");
+    const coverPreview = document.getElementById("coverPreview");
+    const galleryImages = document.getElementById("galleryImages");
+    const galleryPreview = document.getElementById("galleryPreview");
+
+    /* ================= FILE HANDLERS ================= */
+    coverImage.addEventListener("change", () => {
+      const file = coverImage.files[0];
+      if (!file) return;
+
+      coverPreview.innerHTML = `<img src="${URL.createObjectURL(file)}" width="70">`;
+    });
+
+    galleryImages.addEventListener("change", () => {
+      newGalleryFiles = Array.from(galleryImages.files);
+
+      galleryPreview.innerHTML = "";
+      newGalleryFiles.forEach(file => {
+        galleryPreview.innerHTML += `<img src="${URL.createObjectURL(file)}" width="70">`;
+      });
+    });
+
+    /* ================= EXPORT DATA ================= */
+    function exportProducts() {
+      const data = JSON.stringify(PRODUCTS, null, 2);
+
+      // copy to clipboard
+      navigator.clipboard.writeText(data).then(() => {
+        alert("Products copied! Paste into products-data.js");
+      });
+    }
+
+  </script>
+</body>
+</html>
