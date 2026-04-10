@@ -54,3 +54,17 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   });
 });
+
+/* Preloader */
+document.addEventListener("DOMContentLoaded", () => {
+  const preloader = document.getElementById("preloader");
+
+  setTimeout(() => {
+    preloader.style.opacity = "0";
+    preloader.style.transition = "0.3s";
+
+    setTimeout(() => {
+      preloader.style.display = "none";
+    }, 300);
+  }, 300);
+});
