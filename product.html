@@ -1,14 +1,16 @@
+<!-- 
+  Built by Offernext
+  🌐 https://offernext.in
+  📧 offernext.in@gmail.com
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Product Details</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
@@ -24,20 +26,20 @@
 <div class="product-page">
 
   <div class="gallery">
-    <div class="product-topbar">
+    <div class="product-topbar" data-aos="fade-down">
       <button class="back-btn" onclick="history.back()">←</button>
       <span class="breadcrumb">
         Home / <strong id="breadcrumbName"></strong>
       </span>
     </div>
 <main class="main">
-    <div class="image-section">
+    <div class="image-section" data-aos="zoom-in" data-aos-delay="100">
       <img id="mainImage" class="main-image">
       <div class="thumbs" id="thumbs"></div>
     </div>
   </div>
 
-  <div class="product-content">
+  <div class="product-content" data-aos="fade-up" data-aos-delay="100">
 
     <h1 id="productName"></h1>
     <div class="price">₹<span id="productPrice"></span></div>
@@ -105,11 +107,11 @@
       <div class="container">
         <div class="row gy-4 align-items-start justify-content-between">
           <div class="col-xl-5">
-            <h2 class="title">Frequently Asked Questions</h2>
-            <p class="faq-description">
+            <h2 class="title" data-aos="fade-up">Frequently Asked Questions</h2>
+            <p class="faq-description" data-aos="fade-up" data-aos-delay="100">
               Got questions? We've got answers. Here are the most common things customers ask before placing an order.
             </p>
-            <div class="faq">
+            <div class="faq" data-aos="fade-up" data-aos-delay="200">
               <div class="faq-item">
                 <button class="faq-question">
                   How do I place an order?
@@ -134,7 +136,7 @@
               </div>
               <div class="faq-item">
                 <button class="faq-question">
-                  What payment methods can I use?
+                  What payment options can I use?
                   <span class="faq-icon">+</span>
                 </button>
                 <div class="faq-answer">
@@ -168,34 +170,34 @@
             </div>
           </div>
           <div class="col-xl-6">
-            <h2 class="title">Contact</h2>
-            <p class="contact-description">
+            <h2 class="title" data-aos="fade-up">Contact</h2>
+            <p class="contact-description" data-aos="fade-up" data-aos-delay="100">
               Need help with your order or have a question? Our support team is always ready to assist you. Reach out anytime — we ensure quick responses and smooth support.
             </p>
-            <div class="contact-box">
+            <div class="contact-box" data-aos="fade-up" data-aos-delay="200">
               <div class="contact-item">
                 <i class="bi bi-telephone-fill"></i>
                 <div>
-                  <h4>Phone & WhatsApp</h4>
-                  <p>+91 99999 99999</p>
+                  <h4>WhatsApp</h4>
+                  <p>+91 99462 25102</p>
                 </div>
               </div>
               <div class="contact-item">
                 <i class="bi bi-envelope-fill"></i>
                 <div>
                   <h4>Email</h4>
-                  <p>support@example.com</p>
+                  <p>offernext.in@gmail.com</p>
                 </div>
               </div>
               <div class="contact-item">
                 <i class="bi bi-geo-alt-fill"></i>
                 <div>
                   <h4>Location</h4>
-                  <p>Kerala, India</p>
+                  <p>Kottayam, Kerala, India</p>
                 </div>
               </div>
             </div>
-            <div class="image-wrapper">
+            <div class="image-wrapper" data-aos="fade-up">
               <div class="experience-badge">
                 <h3>24/7 <span>Available</span></h3>
               </div>
@@ -207,7 +209,7 @@
   </main>
 
   <!-- FOOTER SECTION -->
-  <footer id="footer" class="footer">
+  <footer id="footer" class="footer" data-aos="fade-up">
     <div class="container footer-top">
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
@@ -219,9 +221,9 @@
             Handpicked products with fast delivery and trusted quality.
           </p>
           <div class="footer-contact pt-3">
-            <p>Kerala, India</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+91 99999 99999</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p>Kottayam, Kerala, India</p>
+            <p class="mt-3"><strong>WhatsApp:</strong> <span>+91 99462 25102</span></p>
+            <p><strong>Email:</strong> <span>offernext.in@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
@@ -271,7 +273,7 @@
       </div>
     </div>
     <div class="container copyright text-center mt-4">
-      <p>© <strong class="px-1 sitename">Trendeals</strong> All Rights Reserved</p>
+      <p>© 2026<strong class="px-1 sitename">Trendeals</strong> All Rights Reserved</p>
       <div class="credits">
         Designed by <a href="https://offernext.in">Offernext</a>
       </div>
