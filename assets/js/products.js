@@ -79,6 +79,13 @@ function initSwipers() {
       spaceBetween: 16,
       freeMode: true,
       grabCursor: true,
+      autoplay: {
+        delay: 0,
+        disableOnInteraction: false
+      },
+      speed: 3000,
+      loop: true,
+
       breakpoints: {
         768: {
           spaceBetween: 24
