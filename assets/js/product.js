@@ -196,7 +196,7 @@ ${hasColors ? `🎨 Color: ${color}\n` : ""}
 `;
 
   window.open(
-    `https://wa.me/919999999999?text=${encodeURIComponent(msg)}`,
+    `https://wa.me/919946225102?text=${encodeURIComponent(msg)}`,
     "_blank"
   );
 };
